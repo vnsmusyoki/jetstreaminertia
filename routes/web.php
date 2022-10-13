@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,13 +25,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum',  config('jetstream.auth_session'),  'verified',])->group(function () {
-    auth()->user()->assignRole('admin');
+Route::middleware(['auth:sanctum',   'verified',])->group(function () {
+//  auth()->user()->assignRole('admin');
     Route::get('/dashboard', function () {
+
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
 Route::middleware('role:admin')->name('admin.')->prefix('admin')->group(function(){
-
+    Route::resource('posts', PostController::class);
 });
 //
